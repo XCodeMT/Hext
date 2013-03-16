@@ -17,10 +17,34 @@
 
 package hext;
 
+import com.XCodeMT.chromeTabs.ITab;
+import com.XCodeMT.chromeTabs.ITabbedPaneWindow;
+import com.XCodeMT.chromeTabs.ITabbedPaneWindowFactory;
+import com.XCodeMT.chromeTabs.tabsX.XTabProgram;
+import java.awt.Window;
+import java.lang.reflect.Method;
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author XCodeMT
  */
-public class Hext {
+public class Hext implements XTabProgram {
+    
+    public static void main(String args[]) {
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
+        SwingUtilities.invokeLater(new Hext());
+    }
 
+    @Override
+    public void run() {
+        ITabbedPaneWindowFactory windowFactory = new HTabbedPaneWindowFactory();
+        ITabbedPaneWindow window = windowFactory.createWindow();
+        ITab tab = window.getTabbedPane().getTabFactory().createTab("New...");
+        tab.setContent(new HexView(tab));
+        window.getTabbedPane().addTab(tab);
+        window.getTabbedPane().setSelectedTab(tab);
+        window.getWindow().setSize(500, 500);
+        window.getWindow().setVisible(true);
+    }
 }
